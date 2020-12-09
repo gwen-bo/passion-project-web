@@ -18,6 +18,10 @@ import hart4 from '../assets/img/game/sprites/hart4.png'
 import hart5 from '../assets/img/game/sprites/hart5.png'
 import hart6 from '../assets/img/game/sprites/hart6.png'
 
+import plantR from '../assets/img/game/visuals/plantR.png'
+import plantL from '../assets/img/game/visuals/plantL.png'
+
+
 import handR from '../assets/img/keypoints/handR.png'
 import handL from '../assets/img/keypoints/handL.png'
 
@@ -67,6 +71,9 @@ export class GamePlayScene extends Phaser.Scene{
     this.load.spritesheet('hart5', hart5, { frameWidth: 337, frameHeight: 409 });
     this.load.spritesheet('hart6', hart6, { frameWidth: 337, frameHeight: 409 });
 
+    this.load.spritesheet('plantR', plantR, { frameWidth: 695, frameHeight: 809 });
+    this.load.spritesheet('plantL', plantL, { frameWidth: 695, frameHeight: 809 });
+
     this.load.image('score-0', score0);
     this.load.image('score-1', score1);
     this.load.image('score-2', score2);
@@ -111,10 +118,29 @@ export class GamePlayScene extends Phaser.Scene{
     this.handRight = this.physics.add.existing(this.keypointsGameOjb.rightWrist);
 
     this.score = 0;
-    this.scoreMeter = this.add.image(0, 0, 'score-0');
-    this.aGrid = new AlignGrid({scene: this.scene, rows: 25, cols: 11, height: window.innerHeight, width: window.innerWidth})
-    // this.aGrid.showNumbers();
-    this.aGrid.placeAtIndex(60, this.scoreMeter); // 38 of 60
+    this.scoreMeter = this.add.image(0, 0, 'score-0').setScale(.8);
+    this.aGrid = new AlignGrid({scene: this.scene, rows: 25, cols: 25, height: window.innerHeight, width: window.innerWidth})
+    this.aGrid.showNumbers();
+    this.aGrid.placeAtIndex(137, this.scoreMeter); // 38 of 60
+
+    const plantR = this.add.sprite(0, 0, 'plantR', 0).setScale(0.5);
+    this.anims.create({
+      key: 'plantR-move',
+      frames: this.anims.generateFrameNumbers('plantR', { start: 0, end: 2 }),
+      frameRate: 5,
+      repeat: -1
+    });
+    plantR.play('plantR-move');
+    const plantL = this.add.sprite(0, 0, 'plantL', 0).setScale(0.5);
+    this.anims.create({
+      key: 'plantL-move',
+      frames: this.anims.generateFrameNumbers('plantL', { start: 0, end: 2 }),
+      frameRate: 5,
+      repeat: -1
+    });
+    plantL.play('plantL-move');
+    this.aGrid.placeAtIndex(522, plantL);
+    this.aGrid.placeAtIndex(501, plantR);
 
     this.targetGroup = this.physics.add.group(); 
     this.keypointGroup = this.physics.add.group([this.handLeft, this.handRight]); 
