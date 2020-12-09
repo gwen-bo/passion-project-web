@@ -16,7 +16,8 @@ export class Tutorial1_goal extends Phaser.Scene{
     console.log(`TutorialScene INIT`);
     this.restart = data.restart;
     this.restartNext = data.restart;
-
+    this.countdownt = 0;
+    this.t = 0; 
     this.skeleton = {
       "leftWrist": {part: "leftWrist", x: 500, y: 500},
       "rightWrist": {part: "rightWrist", x: 500, y: 500}
@@ -94,11 +95,8 @@ export class Tutorial1_goal extends Phaser.Scene{
 
   onEvent(){
     this.t++
-    if(this.t === 2){
-      // console.log('time event', this.t);
+    if(this.t === 1){
       let target1 = this.add.sprite(250, 300, 'hart1', 17).setScale(0.5);
-      // let target2 = this.add.sprite(250, 300, 'hart1', 17).setScale(0.5);
-
       this.anims.create({
         key: 'beweeg',
         frames: this.anims.generateFrameNumbers('hart1', { start: 17, end: 18 }),
@@ -108,12 +106,11 @@ export class Tutorial1_goal extends Phaser.Scene{
       this.anims.create({
         key: 'hit',
         frames: this.anims.generateFrameNumbers('hart1', { start: 0, end: 16 }),
-        frameRate: 3,
+        frameRate: 15,
         repeat: 0
       });
       target1.anims.play('beweeg');
-      this.targetGroup.add(target1, false);
-      // this.targetGroup.add(target2, false);  
+      this.targetGroup.add(target1, true);
     }
   }
 
@@ -128,18 +125,26 @@ export class Tutorial1_goal extends Phaser.Scene{
     }
 
     // welke functie er opgeropen wordt bij de overlap tussen de speler 
-    handleHit (hand, goal){
+    handleHit (hand, target){
+      console.log('hit');
+      this.countdownt = 0;
       this.score++
-      console.log('hit', goal);
-      goal.anims.play('hit');
-      goal.destroy();
+      this.targetGroup.remove(target);
 
-      // goal.on('animationcomplete', function () {
-      // }, this);
+      target.anims.play('hit');
+      target.on('animationcomplete', function(){
+        target.destroy();
+      })
 
-      // if(this.score >= 2){
-        this.scene.start('gameBegin', {restart: this.restartNext});    
-        // }
+      this.time.addEvent({ delay: 1000, callback: this.onHitCountdown, callbackScope: this, repeat: 10 });    
+  }
+
+  countdown = 0; 
+  onHitCountdown(){
+    this.countdown++
+    if(this.countdown >= 1){
+      this.scene.start('gameBegin', {restart: true});    
+    }
   }
 
   fetchPoses = async () => {

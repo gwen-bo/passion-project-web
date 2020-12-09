@@ -30,7 +30,6 @@ export class GamePlayScene extends Phaser.Scene{
   constructor(config){
     super(config);
   }
-  paused = false; 
   score; 
   restart; 
   restartNext; 
@@ -53,26 +52,6 @@ export class GamePlayScene extends Phaser.Scene{
     }
 
   }
-
-  drawKeypoints = (keypoints, scale = 1) => {
-    for (let i = 0; i < keypoints.length; i++) {
-        this.handleKeyPoint(keypoints[i], scale);
-    }
-}
-
-  handleKeyPoint = (keypoint, scale) => {
-    if(!(keypoint.part === "leftWrist" || keypoint.part === "rightWrist")) {
-      return;
-    }
-    if(keypoint.score <= 0.25){
-        return;
-    }
-
-    let skeletonPart = this.skeleton[keypoint.part];
-    const {y, x} = keypoint.position;
-    skeletonPart.x += (x - skeletonPart.x) / 10;
-    skeletonPart.y += (y - skeletonPart.y) / 10;
-  };
 
   preload(){
     this.load.image('handR', handR);
@@ -137,10 +116,36 @@ export class GamePlayScene extends Phaser.Scene{
     this.createCoordinates();
   }
 
-  handleHit (hand, goal){
+
+  drawKeypoints = (keypoints, scale = 1) => {
+    for (let i = 0; i < keypoints.length; i++) {
+        this.handleKeyPoint(keypoints[i], scale);
+    }
+}
+
+  handleKeyPoint = (keypoint, scale) => {
+    if(!(keypoint.part === "leftWrist" || keypoint.part === "rightWrist")) {
+      return;
+    }
+    if(keypoint.score <= 0.25){
+        return;
+    }
+
+    let skeletonPart = this.skeleton[keypoint.part];
+    const {y, x} = keypoint.position;
+    skeletonPart.x += (x - skeletonPart.x) / 10;
+    skeletonPart.y += (y - skeletonPart.y) / 10;
+  };
+
+  handleHit (hand, target){
+    this.targetGroup.remove(target);
     this.score++
+    
     this.hitSound.play();
-    goal.destroy();
+    target.anims.play('hit');
+    target.on('animationcomplete', function(){
+      target.destroy();
+    })
     this.createCoordinates();
 }
 
@@ -150,21 +155,19 @@ y;
 previousX = 0; 
 previousY = 0;
 createCoordinates(){
-
   this.x = Phaser.Math.Between(300, (window.innerWidth - 300));
   this.y = Phaser.Math.Between(400, (window.innerHeight - 300));
 
   let distance = Phaser.Math.Distance.Between(this.x, this.y, this.previousX, this.previousY);
   if(distance <= 250){
-    // this.x = Phaser.Math.Between(300, 800);
-    // this.y = Phaser.Math.Between(700, 1000);
-    // of functie opnieuw oproepen ?
     this.createCoordinates();
-  }else{
-    this.drawGoal();
-    this.previousX = this.x; 
-    this.previousY = this.y; 
+    return; 
   }
+
+  this.drawGoal();
+  this.previousX = this.x; 
+  this.previousY = this.y; 
+  
 }
  
 drawGoal(){
@@ -182,6 +185,12 @@ drawGoal(){
         frameRate: 5,
         repeat: -1
       });
+      this.anims.create({
+        key: 'hit3',
+        frames: this.anims.generateFrameNumbers('hart3', { start: 0, end: 16 }),
+        frameRate: 15,
+        repeat: 0
+      });
       newTarget.anims.play('beweeg3');
     break;
     case "hart4": 
@@ -191,6 +200,12 @@ drawGoal(){
         frames: this.anims.generateFrameNumbers('hart4', { start: 17, end: 18 }),
         frameRate: 5,
         repeat: -1
+      });
+      this.anims.create({
+        key: 'hit4',
+        frames: this.anims.generateFrameNumbers('hart4', { start: 0, end: 16 }),
+        frameRate: 15,
+        repeat: 0
       });
       newTarget.anims.play('beweeg4');
     break;
@@ -202,6 +217,12 @@ drawGoal(){
         frameRate: 5,
         repeat: -1
       });
+      this.anims.create({
+        key: 'hit5',
+        frames: this.anims.generateFrameNumbers('hart5', { start: 0, end: 16 }),
+        frameRate: 15,
+        repeat: 0
+      });
       newTarget.anims.play('beweeg5');
     break;
     case "hart6": 
@@ -211,6 +232,12 @@ drawGoal(){
         frames: this.anims.generateFrameNumbers('hart6', { start: 17, end: 18 }),
         frameRate: 5,
         repeat: -1
+      });
+      this.anims.create({
+        key: 'hit6',
+        frames: this.anims.generateFrameNumbers('hart6', { start: 0, end: 16 }),
+        frameRate: 15,
+        repeat: 0
       });
       newTarget.anims.play('beweeg6');
     break;
@@ -227,15 +254,16 @@ drawGoal(){
   }
   pausedTime; 
 
+  pausedScore = 0; 
   // PLUGIN
   handlePoses(poses){
     poses.forEach(({score, keypoints}) => {
       if(score >= 0.4){
+        this.pausedScore = 0; 
         this.drawKeypoints(keypoints);
         return; 
       }else if (score <= 0.02){
-        console.log('pausing, because bad score', score);
-        this.paused = true; 
+        this.pausedScore++
       }
     })
   }
@@ -246,6 +274,7 @@ drawGoal(){
   }
 
   update(){
+    console.log(this.score);
     this.fetchPoses();
 
     this.keypointsGameOjb.leftWrist.x = this.skeleton.leftWrist.x;
@@ -254,11 +283,11 @@ drawGoal(){
     this.keypointsGameOjb.rightWrist.x = this.skeleton.rightWrist.x;
     this.keypointsGameOjb.rightWrist.y = this.skeleton.rightWrist.y;
 
-    if(this.paused === true){
+    if(this.pausedScore >= 10){
       this.scene.launch('timeOut', {currentScene: 'gameplay'});  
       this.pausedTimer();
-    }else if(this.paused === false){
-      this.scene.stop('timeOut');
+    }else {
+      this.scene.sleep('timeOut');
     }
 
     this.scoreMeter.setTexture(`score-${this.score}`);
