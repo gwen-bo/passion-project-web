@@ -4,6 +4,13 @@ import handL from '../assets/img/keypoints/handL.png'
 import uitlegHanden from '../assets/img/tutorial/Handen-tut.png'
 import skip from '../assets/img/tutorial/Skip-tut.png'
 
+import hart1 from '../assets/img/game/sprites/hart1.png'
+
+import uitlegAudio from '../assets/audio/Dit-spel-speel-je-met-je-handen.mp3'
+import probeerHartje from '../assets/audio/Probeer-maar-Hartje.mp3'
+import Super from '../assets/audio/Super.mp3'
+
+
 import AlignGrid from '../js/utilities/alignGrid'
 
 export class Tutorial1Scene extends Phaser.Scene{
@@ -60,13 +67,14 @@ export class Tutorial1Scene extends Phaser.Scene{
 
 
   preload(){
+    this.load.spritesheet('hart1', hart1, { frameWidth: 337, frameHeight: 409 });
     this.load.image('handR', handR);
     this.load.image('handL', handL);
     this.load.image('uitlegHanden', uitlegHanden);
     this.load.image('skip', skip);
-
-    // this.load.image('voetR', './assets/keypoints/voetR.png')
-    // this.load.image('voetL', './assets/keypoints/voetL.png')
+    this.load.audio('uitlegAudio', uitlegAudio);
+    this.load.audio('probeerHartje', probeerHartje);
+    this.load.audio('Super', Super);
   }
 
 
@@ -101,20 +109,67 @@ export class Tutorial1Scene extends Phaser.Scene{
     this.handRight = this.physics.add.existing(this.keypointsGameOjb.rightWrist);
     this.handLeft = this.physics.add.existing(this.keypointsGameOjb.leftWrist);
 
-    this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, repeat: 10 });    
+    this.targetGroup = this.physics.add.group(); 
+
+    this.physics.add.overlap(this.handLeft, this.targetGroup, this.handleHit, null, this);
+    this.physics.add.overlap(this.handRight, this.targetGroup, this.handleHit, null, this);
+
+    this.uitlegAudio = this.sound.add('uitlegAudio', {loop: false});
+    this.probeerHartje = this.sound.add('probeerHartje', {loop: false});
+    this.super = this.sound.add('Super', {loop: false});
+
+    this.uitlegAudio.play();
+    this.uitlegAudio.on('complete', this.handleEndAudio, this.scene.scene);
+  }
+
+  handleEndAudio(){
+    console.log('audio is gedaan');
+    console.log(this);
+    this.probeerHartje.play();
+    this.probeerHartje.on('complete', this.drawTarget, this.scene.scene);
   }
 
   startGame(){
     this.scene.start('gameBegin', {restart: this.restartNext});    
   }
 
-  t = 0; 
-  onEvent(){
-    this.t++
-    if(this.t === 3){
-      console.log('time event', this.t);
-      // this.scene.start('tutorial1_goal', {restart: this.restartNext, webcamObj: this.$webcam, poseNet: this.poseNet });    
-      this.scene.start('tutorial1_goal', {restart: this.restartNext});    
+  drawTarget(){
+    let target1 = this.add.sprite(250, 300, 'hart1', 17).setScale(0.5);
+    this.anims.create({
+      key: 'beweeg',
+      frames: this.anims.generateFrameNumbers('hart1', { start: 17, end: 18 }),
+      frameRate: 3,
+      repeat: -1
+    });
+    this.anims.create({
+      key: 'hit',
+      frames: this.anims.generateFrameNumbers('hart1', { start: 0, end: 16 }),
+      frameRate: 15,
+      repeat: 0
+    });
+    target1.anims.play('beweeg');
+    this.targetGroup.add(target1, true);
+  }
+
+   // welke functie er opgeropen wordt bij de overlap tussen de speler 
+   handleHit (hand, target){
+    console.log('hit');
+    this.countdownt = 0;
+    this.targetGroup.remove(target);
+    this.super.play();
+    target.anims.play('hit');
+    target.on('animationcomplete', function(){
+      target.destroy();
+    })
+
+    this.time.addEvent({ delay: 1000, callback: this.onHitCountdown, callbackScope: this, repeat: 2 });    
+}
+
+  countdown = 0; 
+  onHitCountdown(){
+    this.countdown++
+    if(this.countdown >= 1){
+      this.scene.start('gameBegin', {restart: true});    
     }
   }
 
