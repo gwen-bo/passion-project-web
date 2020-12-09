@@ -98,8 +98,8 @@ export class GameBegin extends Phaser.Scene{
 }
 
   startGame(){
-  this.betekenisAudio.stop();
-  this.scene.start('gameplay', { restart: this.restartNext, skeletonObj: this.skeleton});    
+    this.betekenisAudio.stop();
+    this.scene.start('gameplay', { restart: this.restartNext, skeletonObj: this.skeleton});    
   }
 
   // PLUGIN
