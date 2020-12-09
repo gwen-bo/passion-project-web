@@ -22,6 +22,10 @@ import handR from '../assets/img/keypoints/handR.png'
 import handL from '../assets/img/keypoints/handL.png'
 
 import hit from '../assets/audio/hit.mp3'
+import Klaar from '../assets/audio/Klaar-start.mp3'
+import Super from '../assets/audio/Super.mp3'
+import BijnaVol from '../assets/audio/Nog-eentje-de-meter-zit-bijna-vol.mp3'
+import EersteAl from '../assets/audio/Super-Dat-is-de-eerste-al.mp3'
 
 
 import AlignGrid from '../js/utilities/alignGrid'
@@ -77,6 +81,11 @@ export class GamePlayScene extends Phaser.Scene{
     this.load.image('score-11', score11);
     this.load.image('score-12', score12);
     this.load.image('score-13', score13);
+
+    this.load.audio('Klaar', Klaar);
+    this.load.audio('Super', Super);
+    this.load.audio('EersteAl', EersteAl);
+    this.load.audio('BijnaVol', BijnaVol);
   }
 
   keypointsGameOjb = {
@@ -113,9 +122,14 @@ export class GamePlayScene extends Phaser.Scene{
     this.hitSound = this.sound.add('hit', {loop: false});
     this.physics.add.overlap(this.keypointGroup, this.targetGroup, this.handleHit, null, this);
 
+    this.klaar = this.sound.add('Klaar', {loop: false});
+    this.super = this.sound.add('Super', {loop: false});
+    this.bijnaVol = this.sound.add('BijnaVol', {loop: false});
+    this.eersteAl = this.sound.add('EersteAl', {loop: false});
+
+    this.klaar.play();
     this.createCoordinates();
   }
-
 
   drawKeypoints = (keypoints, scale = 1) => {
     for (let i = 0; i < keypoints.length; i++) {
@@ -140,12 +154,39 @@ export class GamePlayScene extends Phaser.Scene{
   handleHit (hand, target){
     this.targetGroup.remove(target);
     this.score++
-    
+    let sprite = target.anims.currentFrame.textureKey;
     this.hitSound.play();
-    target.anims.play('hit');
+    switch(sprite){
+      case 'hart3': 
+        target.anims.play('hit3');
+      break; 
+      case 'hart4': 
+        target.anims.play('hit4');
+      break;
+      case 'hart5': 
+        target.anims.play('hit5');
+      break;
+      case 'hart6': 
+        target.anims.play('hit6');
+      break;
+    }
+    
     target.on('animationcomplete', function(){
       target.destroy();
     })
+
+    switch(this.score){
+      case 1: 
+        this.eersteAl.play();
+      break; 
+      case 5: 
+        this.super.play();
+      break; 
+      case 12: 
+        this.bijnaVol.play();
+        this.scene.start('ending');    
+        break; 
+    }
     this.createCoordinates();
 }
 
@@ -291,10 +332,5 @@ drawGoal(){
     }
 
     this.scoreMeter.setTexture(`score-${this.score}`);
-    if(this.score >= 13){
-      this.scene.start('ending');    
-
-    }
-
   }
 }

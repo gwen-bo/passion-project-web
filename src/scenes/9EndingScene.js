@@ -1,4 +1,5 @@
 import endingscreen from '../assets/img/einde/einde_sprite.png'
+import HelemaalVol from '../assets/audio/Goed-gedaan-We-zijn-weer-helemaal-ondersteboven-einde.mp3'
 
 import AlignGrid from '../js/utilities/alignGrid'
 
@@ -14,6 +15,7 @@ export class EndingScene extends Phaser.Scene{
 
   preload(){
     this.load.spritesheet('endingscreen', endingscreen, { frameWidth: 800, frameHeight: 598 });
+    this.load.audio('HelemaalVol', HelemaalVol);
   }
 
   create(){
@@ -30,6 +32,8 @@ export class EndingScene extends Phaser.Scene{
       repeat: -1
     });
     ending.anims.play('ending');
+    this.helemaalVol = this.sound.add('HelemaalVol', {loop: false});
+    this.helemaalVol.play();
   }
 
   t = 0; 

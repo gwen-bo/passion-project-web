@@ -1,6 +1,10 @@
 // uitleg over handen strekken en bolletje dat handen voorstelt 
 import handR from '../assets/img/keypoints/handR.png'
 import handL from '../assets/img/keypoints/handL.png'
+import skip from '../assets/img/tutorial/Skip-tut.png'
+
+import betekenisAudio from '../assets/audio/Ondersteboven-zijn-van-iemand-betekent.mp3'
+import AlignGrid from '../js/utilities/alignGrid'
 
 export class GameBegin extends Phaser.Scene{
   constructor(config){
@@ -53,8 +57,10 @@ export class GameBegin extends Phaser.Scene{
 
 
   preload(){
+    this.load.image('skip', skip);
     this.load.image('handR', handR);
     this.load.image('handL', handL);
+    this.load.audio('betekenisAudio', betekenisAudio);
   }
 
 
@@ -70,21 +76,30 @@ export class GameBegin extends Phaser.Scene{
   create(){
     this.posenetplugin = this.plugins.get('PoseNetPlugin');
 
+    this.aGrid = new AlignGrid({scene: this.scene, rows:25, cols: 11, height: window.innerHeight, width: window.innerWidth})
+    let skipButton = this.add.image(0, 0, 'skip').setScale(.6);
+    skipButton.setInteractive({ useHandCursor: true });
+    skipButton.on('pointerdown', () => this.startGame() );
+    this.aGrid.placeAtIndex(229, skipButton); //240
+
     this.keypointsGameOjb.leftWrist = this.add.image(this.skeleton.leftWrist.x, this.skeleton.leftWrist.y, 'handL').setScale(0.5);
     this.handLeft = this.physics.add.existing(this.keypointsGameOjb.leftWrist);
     this.keypointsGameOjb.rightWrist = this.add.image(this.skeleton.rightWrist.x,this.skeleton.rightWrist.y, 'handR').setScale(0.5);
     this.handRight = this.physics.add.existing(this.keypointsGameOjb.rightWrist);
 
-    this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, repeat: 10 });    
+    this.betekenisAudio = this.sound.add('betekenisAudio', {loop: false});
+    this.betekenisAudio.play();
+    this.betekenisAudio.on('complete', this.handleEndAudio, this.scene.scene);
   }
 
-  t = 0; 
-  onEvent(){
-    this.t++
-    if(this.t === 3){
-      console.log('time event', this.t);
-      this.scene.start('gameplay', { restart: this.restartNext, skeletonObj: this.skeleton});    
-    }
+  handleEndAudio(){
+    console.log('audio is gedaan');
+    this.scene.start('gameplay', { restart: this.restartNext, skeletonObj: this.skeleton});    
+}
+
+  startGame(){
+  this.betekenisAudio.stop();
+  this.scene.start('gameplay', { restart: this.restartNext, skeletonObj: this.skeleton});    
   }
 
   // PLUGIN

@@ -1,5 +1,6 @@
 import timeOutScreen from '../assets/img/timeOut/timeOut.png'
 import AlignGrid from '../js/utilities/alignGrid'
+import AudioCue from '../assets/audio/Hé-ben-je-er-nog.mp3'
 
 export class TimeOutScene extends Phaser.Scene{
     constructor(config){
@@ -15,6 +16,7 @@ export class TimeOutScene extends Phaser.Scene{
 
     preload(){
         this.load.spritesheet('timeOutScreen', timeOutScreen, { frameWidth: 737, frameHeight: 571 });
+        this.load.audio('AudioCue', AudioCue);
     }
 
     create(){
@@ -28,9 +30,7 @@ export class TimeOutScene extends Phaser.Scene{
           repeat: -1
         });
         timeOutMessage.anims.play('paused');
-    }
-    
-    update(){
-        
+        this.audio = this.sound.add('AudioCue', {loop: false});
+        this.audio.play();
     }
   }

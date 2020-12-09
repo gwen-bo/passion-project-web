@@ -124,12 +124,13 @@ export class Tutorial1Scene extends Phaser.Scene{
 
   handleEndAudio(){
     console.log('audio is gedaan');
-    console.log(this);
     this.probeerHartje.play();
     this.probeerHartje.on('complete', this.drawTarget, this.scene.scene);
   }
 
   startGame(){
+    this.uitlegAudio.stop();
+    this.probeerHartje.stop();
     this.scene.start('gameBegin', {restart: this.restartNext});    
   }
 
@@ -169,6 +170,8 @@ export class Tutorial1Scene extends Phaser.Scene{
   onHitCountdown(){
     this.countdown++
     if(this.countdown >= 1){
+      this.uitlegAudio.stop();
+      this.probeerHartje.stop();
       this.scene.start('gameBegin', {restart: true});    
     }
   }
