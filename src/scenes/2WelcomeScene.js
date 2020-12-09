@@ -41,7 +41,7 @@ export class WelcomeScene extends Phaser.Scene{
       this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, repeat: 10 });    
       let title = this.add.sprite(0, 0, 'titlescreen', 0).setScale(0.8);
       this.aGrid = new AlignGrid({scene: this.scene, rows:15, cols: 11, height: window.innerHeight, width: window.innerWidth})
-      this.aGrid.showNumbers();
+      // this.aGrid.showNumbers();
       this.aGrid.placeAtIndex(82, title);
       this.anims.create({
         key: 'welcome',

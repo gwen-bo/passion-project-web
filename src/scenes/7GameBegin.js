@@ -7,24 +7,13 @@ export class GameBegin extends Phaser.Scene{
     super(config);
   }
 
-  // om de input van de webcam om te draaien
-  // flipPoseHorizontal = true;
-
-  // poseNet = undefined; 
-  // poses = [];
   restart; 
   restartNext; 
 
   init = async (data) => {
-    // console.log(data);
-    // this.$webcam = data.webcamObj;
-    // this.poseNet = data.poseNet;
     this.t = 0; 
 
     console.log(`GameBegin INIT`);
-
-    // this.$webcam.width = window.innerWidth;
-    // this.$webcam.height = window.innerHeight;
 
     this.restart = data.restart;
     this.restartNext = data.restart;
@@ -36,28 +25,9 @@ export class GameBegin extends Phaser.Scene{
 
     if(this.restart === true){
       console.log('restarting');
-      // this.scene.restart({ restart: false, webcamObj: this.$webcam, poseNet: this.poseNet})
       this.scene.restart({ restart: false})
     }
-
-    // this.poseEstimation();
   }
-
-  // poseEstimation = async () => {
-  //   // console.log('pose estimation - tut1 scene');
-  //   const pose = await this.poseNet.estimateSinglePose(this.$webcam, {
-  //       flipHorizontal: this.flipPoseHorizontal,
-  //   });
-    
-  //   this.poses = this.poses.concat(pose);
-  //   this.poses.forEach(({score, keypoints}) => {
-  //     // console.log('pose is being detected', score)
-  //     if(score > 0.4){
-  //       this.drawKeypoints(keypoints);
-  //     }
-  //   });
-  // }
-
   // eventueel ook op andere javascript file 
   drawKeypoints = (keypoints, scale = 1) => {
     for (let i = 0; i < keypoints.length; i++) {
@@ -113,7 +83,6 @@ export class GameBegin extends Phaser.Scene{
     this.t++
     if(this.t === 3){
       console.log('time event', this.t);
-      // this.scene.start('gameplay', { restart: this.restartNext, webcamObj: this.$webcam, poseNet: this.poseNet, skeletonObj: this.skeleton});    
       this.scene.start('gameplay', { restart: this.restartNext, skeletonObj: this.skeleton});    
     }
   }

@@ -30,20 +30,13 @@ export class GamePlayScene extends Phaser.Scene{
   constructor(config){
     super(config);
   }
-
-  // om de input van de webcam om te draaien
-  // flipPoseHorizontal = true;
-
-  // poseNet = undefined; 
-  // poses = [];
   paused = false; 
   score; 
   restart; 
   restartNext; 
 
   init = async (data) => {
-    // this.$webcam = data.webcamObj;
-    // this.poseNet = data.poseNet;
+
     this.skeleton = data.skeletonObj;
 
     console.log(`Gameplay scene INIT`);
@@ -51,21 +44,16 @@ export class GamePlayScene extends Phaser.Scene{
     this.score = 0;
     this.pausedTime = 0; 
 
-    // this.$webcam.width = window.innerWidth;
-    // this.$webcam.height = window.innerHeight;
     this.restart = data.restart;
     this.restartNext = data.restart;
 
     if(this.restart === true){
       console.log('restarting');
-      // this.scene.restart({ restart: false, webcamObj: this.$webcam, poseNet: this.poseNet})
       this.scene.restart({ restart: false})
     }
 
-    // this.poseEstimation();
   }
 
-  // eventueel ook op andere javascript file 
   drawKeypoints = (keypoints, scale = 1) => {
     for (let i = 0; i < keypoints.length; i++) {
         this.handleKeyPoint(keypoints[i], scale);
@@ -137,7 +125,7 @@ export class GamePlayScene extends Phaser.Scene{
     this.score = 0;
     this.scoreMeter = this.add.image(0, 0, 'score-0');
     this.aGrid = new AlignGrid({scene: this.scene, rows: 25, cols: 11, height: window.innerHeight, width: window.innerWidth})
-    this.aGrid.showNumbers();
+    // this.aGrid.showNumbers();
     this.aGrid.placeAtIndex(60, this.scoreMeter); // 38 of 60
 
     this.targetGroup = this.physics.add.group(); 

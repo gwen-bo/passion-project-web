@@ -21,7 +21,7 @@ export class EndingScene extends Phaser.Scene{
 
     let ending = this.add.sprite(0, 0, 'endingscreen', 0);
     this.aGrid = new AlignGrid({scene: this.scene, rows:25, cols: 11, height: window.innerHeight, width: window.innerWidth});
-    this.aGrid.showNumbers();
+    // this.aGrid.showNumbers();
     this.aGrid.placeAtIndex(126, ending);
     this.anims.create({
       key: 'ending',
