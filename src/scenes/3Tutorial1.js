@@ -172,7 +172,7 @@ export class Tutorial1Scene extends Phaser.Scene{
     if(this.countdown >= 1){
       this.uitlegAudio.stop();
       this.probeerHartje.stop();
-      this.scene.start('gameBegin', {restart: true});    
+      this.scene.start('gameBegin', {restart: this.restartNext});    
     }
   }
 

@@ -50,10 +50,10 @@ export class GamePlayScene extends Phaser.Scene{
     this.restart = data.restart;
     this.restartNext = data.restart;
 
-    if(this.restart === true){
-      console.log('restarting');
-      this.scene.restart({ restart: false})
-    }
+    // if(this.restart === true){
+    //   console.log('restarting');
+    //   this.scene.restart({ restart: false})
+    // }
 
   }
 
@@ -128,7 +128,12 @@ export class GamePlayScene extends Phaser.Scene{
     this.eersteAl = this.sound.add('EersteAl', {loop: false});
 
     this.klaar.play();
+    this.klaar.on('complete', this.handleStart, this.scene.scene);
+  }
+
+  handleStart(){
     this.createCoordinates();
+    this.time.addEvent({ delay: 3000, callback: this.createCoordinates, callbackScope: this, loop: true });    
   }
 
   drawKeypoints = (keypoints, scale = 1) => {
@@ -151,11 +156,8 @@ export class GamePlayScene extends Phaser.Scene{
     skeletonPart.y += (y - skeletonPart.y) / 10;
   };
 
-  handleHit (hand, target){
-    this.targetGroup.remove(target);
-    this.score++
+  handleVisualsAndAudio(target){
     let sprite = target.anims.currentFrame.textureKey;
-    this.hitSound.play();
     switch(sprite){
       case 'hart3': 
         target.anims.play('hit3');
@@ -170,7 +172,8 @@ export class GamePlayScene extends Phaser.Scene{
         target.anims.play('hit6');
       break;
     }
-    
+
+    this.hitSound.play();
     target.on('animationcomplete', function(){
       target.destroy();
     })
@@ -184,34 +187,50 @@ export class GamePlayScene extends Phaser.Scene{
       break; 
       case 12: 
         this.bijnaVol.play();
+      break; 
+      case 13: 
+        this.bijnaVol.stop();
         this.scene.start('ending');    
-        break; 
+      break; 
     }
-    this.createCoordinates();
+  }
+
+
+  handleHit (hand, target){
+    this.targetGroup.remove(target);
+    this.score++;
+    this.handleVisualsAndAudio(target);
+    return; 
 }
 
 // checking if distance is big enough between the coördinates
 x; 
 y; 
-previousX = 0; 
-previousY = 0;
+previousX =0; 
+previousY =0;
 createCoordinates(){
-  this.x = Phaser.Math.Between(300, (window.innerWidth - 300));
-  this.y = Phaser.Math.Between(400, (window.innerHeight - 300));
+  this.targetGroup.clear(true, true);
+  this.x = Phaser.Math.Between(100, (window.innerWidth - 100));
+  this.y = Phaser.Math.Between(400, (window.innerHeight - 200));
 
-  let distance = Phaser.Math.Distance.Between(this.x, this.y, this.previousX, this.previousY);
-  if(distance <= 250){
-    this.createCoordinates();
-    return; 
+  if(!(this.previousY === undefined && this.previousX === undefined)){
+    let distance = Phaser.Math.Distance.Between(this.x, this.y, this.previousX, this.previousY);
+    console.log(this.score, distance);
+      if(distance <= 600){
+        this.createCoordinates();
+        return; 
+      }else {
+        this.drawGoal();
+        this.previousX = this.x; 
+        this.previousY = this.y;   
+      }
+  }else{
+    this.drawGoal();
   }
-
-  this.drawGoal();
-  this.previousX = this.x; 
-  this.previousY = this.y; 
-  
 }
  
 drawGoal(){
+  // this.targetGroup.clear(true, true);
   console.log('drawGoal activated');
   const targets = ["hart3", "hart4", "hart5", "hart6"];
   let currentTarget = targets[Math.floor(Math.random()*targets.length)];
@@ -315,7 +334,7 @@ drawGoal(){
   }
 
   update(){
-    console.log(this.score);
+    // console.log(this.previousX, this.previousY);
     this.fetchPoses();
 
     this.keypointsGameOjb.leftWrist.x = this.skeleton.leftWrist.x;
@@ -324,10 +343,10 @@ drawGoal(){
     this.keypointsGameOjb.rightWrist.x = this.skeleton.rightWrist.x;
     this.keypointsGameOjb.rightWrist.y = this.skeleton.rightWrist.y;
 
-    if(this.pausedScore >= 10){
+    if(this.pausedScore === 10){
       this.scene.launch('timeOut', {currentScene: 'gameplay'});  
       this.pausedTimer();
-    }else {
+    }else if(this.pausedScore === 0){
       this.scene.sleep('timeOut');
     }
 
