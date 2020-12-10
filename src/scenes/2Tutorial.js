@@ -101,10 +101,10 @@ export class TutorialScene extends Phaser.Scene{
     skipButton.on('pointerdown', () => this.startGame() );
 
     let title = this.add.image(0, 0, 'uitlegHanden').setScale(.9);
-    this.aGrid = new AlignGrid({scene: this.scene, rows:25, cols: 11, height: window.innerHeight, width: window.innerWidth})
+    this.aGrid = new AlignGrid({scene: this.scene, rows:25, cols: 25, height: window.innerHeight, width: window.innerWidth})
     // this.aGrid.showNumbers();
-    this.aGrid.placeAtIndex(49, title); 
-    this.aGrid.placeAtIndex(229, skipButton); //240
+    this.aGrid.placeAtIndex(112, title); //
+    this.aGrid.placeAtIndex(597, skipButton); // 572
 
     this.keypointsGameOjb.leftWrist = this.add.image(this.skeleton.leftWrist.x, this.skeleton.leftWrist.y, 'handL').setScale(0.5);
     this.keypointsGameOjb.rightWrist = this.add.image(this.skeleton.rightWrist.x,this.skeleton.rightWrist.y, 'handR').setScale(0.5);

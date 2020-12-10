@@ -72,13 +72,13 @@ export class WelcomeScene extends Phaser.Scene{
     posenetplugin;
     create(){  
       this.posenetplugin = this.plugins.get('PoseNetPlugin');
-      this.aGrid = new AlignGrid({scene: this.scene, rows:25, cols: 11, height: window.innerHeight, width: window.innerWidth})
+      this.aGrid = new AlignGrid({scene: this.scene, rows:25, cols: 25, height: window.innerHeight, width: window.innerWidth})
       // this.aGrid.showNumbers();
 
       let skipButton = this.add.image(0, 0, 'skip').setScale(.6);
       skipButton.setInteractive({ useHandCursor: true });
       skipButton.on('pointerdown', () => this.startGame() );
-      this.aGrid.placeAtIndex(229, skipButton); 
+      this.aGrid.placeAtIndex(597, skipButton); // 572
 
       this.keypointsGameOjb.leftWrist = this.add.image(this.skeleton.leftWrist.x, this.skeleton.leftWrist.y, 'handL').setScale(0.5);
       this.handLeft = this.physics.add.existing(this.keypointsGameOjb.leftWrist);
@@ -86,8 +86,7 @@ export class WelcomeScene extends Phaser.Scene{
       this.handRight = this.physics.add.existing(this.keypointsGameOjb.rightWrist);  
   
       let title = this.add.sprite(0, 0, 'titlescreen', 0).setScale(0.8);
-
-      this.aGrid.placeAtIndex(137, title);
+      this.aGrid.placeAtIndex(312, title); // 
       this.anims.create({
         key: 'welcome',
         frames: this.anims.generateFrameNumbers('titlescreen', { start: 0, end: 3 }),

@@ -15,7 +15,7 @@ import score13 from '../assets/img/game/meter/13.png'
 
 import hart3 from '../assets/img/game/sprites/hart3.png'
 import hart4 from '../assets/img/game/sprites/hart4.png'
-import hart5 from '../assets/img/game/sprites/hart5.png'
+import hart1 from '../assets/img/game/sprites/hart1.png'
 import hart6 from '../assets/img/game/sprites/hart6.png'
 
 import plantR from '../assets/img/game/visuals/plantR.png'
@@ -30,6 +30,7 @@ import Klaar from '../assets/audio/Klaar-start.mp3'
 import Super from '../assets/audio/Super.mp3'
 import BijnaVol from '../assets/audio/Nog-eentje-de-meter-zit-bijna-vol.mp3'
 import EersteAl from '../assets/audio/Super-Dat-is-de-eerste-al.mp3'
+import Afsluiten from '../assets/audio/Oeps-niemand-te-zien.mp3'
 
 
 import AlignGrid from '../js/utilities/alignGrid'
@@ -68,7 +69,7 @@ export class GamePlayScene extends Phaser.Scene{
     this.load.audio('hit', hit);
     this.load.spritesheet('hart3', hart3, { frameWidth: 337, frameHeight: 409 });
     this.load.spritesheet('hart4', hart4, { frameWidth: 337, frameHeight: 409 });
-    this.load.spritesheet('hart5', hart5, { frameWidth: 337, frameHeight: 409 });
+    this.load.spritesheet('hart1', hart1, { frameWidth: 337, frameHeight: 409 });
     this.load.spritesheet('hart6', hart6, { frameWidth: 337, frameHeight: 409 });
 
     this.load.spritesheet('plantR', plantR, { frameWidth: 695, frameHeight: 809 });
@@ -93,6 +94,7 @@ export class GamePlayScene extends Phaser.Scene{
     this.load.audio('Super', Super);
     this.load.audio('EersteAl', EersteAl);
     this.load.audio('BijnaVol', BijnaVol);
+    this.load.audio('Afsluiten', Afsluiten);
   }
 
   keypointsGameOjb = {
@@ -127,7 +129,7 @@ export class GamePlayScene extends Phaser.Scene{
     this.anims.create({
       key: 'plantR-move',
       frames: this.anims.generateFrameNumbers('plantR', { start: 0, end: 2 }),
-      frameRate: 5,
+      frameRate: 2,
       repeat: -1
     });
     plantR.play('plantR-move');
@@ -135,11 +137,11 @@ export class GamePlayScene extends Phaser.Scene{
     this.anims.create({
       key: 'plantL-move',
       frames: this.anims.generateFrameNumbers('plantL', { start: 0, end: 2 }),
-      frameRate: 5,
+      frameRate: 2,
       repeat: -1
     });
     plantL.play('plantL-move');
-    this.aGrid.placeAtIndex(522, plantL);
+    this.aGrid.placeAtIndex(497, plantL); //497
     this.aGrid.placeAtIndex(502, plantR);
 
     this.targetGroup = this.physics.add.group(); 
@@ -152,14 +154,19 @@ export class GamePlayScene extends Phaser.Scene{
     this.super = this.sound.add('Super', {loop: false});
     this.bijnaVol = this.sound.add('BijnaVol', {loop: false});
     this.eersteAl = this.sound.add('EersteAl', {loop: false});
+    this.afsluiten = this.sound.add('Afsluiten', {loop: false});
 
     this.klaar.play();
     this.klaar.on('complete', this.handleStart, this.scene.scene);
+    this.targetTimer = this.time.addEvent({ delay: 3000, callback: this.createCoordinates, callbackScope: this, loop: true });    
+    this.targetTimer.paused = true; 
   }
 
+  targetTimer; 
   handleStart(){
     this.createCoordinates();
-    this.time.addEvent({ delay: 3000, callback: this.createCoordinates, callbackScope: this, loop: true });    
+    this.targetTimer.paused = false; 
+
   }
 
   drawKeypoints = (keypoints, scale = 1) => {
@@ -191,8 +198,8 @@ export class GamePlayScene extends Phaser.Scene{
       case 'hart4': 
         target.anims.play('hit4');
       break;
-      case 'hart5': 
-        target.anims.play('hit5');
+      case 'hart1': 
+        target.anims.play('hit1');
       break;
       case 'hart6': 
         target.anims.play('hit6');
@@ -258,7 +265,7 @@ createCoordinates(){
 drawGoal(){
   // this.targetGroup.clear(true, true);
   console.log('drawGoal activated');
-  const targets = ["hart3", "hart4", "hart5", "hart6"];
+  const targets = ["hart3", "hart4", "hart1", "hart6"];
   let currentTarget = targets[Math.floor(Math.random()*targets.length)];
   let newTarget; 
   
@@ -295,21 +302,21 @@ drawGoal(){
       });
       newTarget.anims.play('beweeg4');
     break;
-    case "hart5": 
-      newTarget = this.add.sprite(this.x, this.y, 'hart5', 0).setScale(0.5);
+    case "hart1": 
+      newTarget = this.add.sprite(this.x, this.y, 'hart1', 0).setScale(0.5);
       this.anims.create({
-        key: 'beweeg5',
-        frames: this.anims.generateFrameNumbers('hart5', { start: 17, end: 18 }),
+        key: 'beweeg1',
+        frames: this.anims.generateFrameNumbers('hart1', { start: 17, end: 18 }),
         frameRate: 5,
         repeat: -1
       });
       this.anims.create({
-        key: 'hit5',
-        frames: this.anims.generateFrameNumbers('hart5', { start: 0, end: 16 }),
+        key: 'hit1',
+        frames: this.anims.generateFrameNumbers('hart1', { start: 0, end: 16 }),
         frameRate: 15,
         repeat: 0
       });
-      newTarget.anims.play('beweeg5');
+      newTarget.anims.play('beweeg1');
     break;
     case "hart6": 
       newTarget = this.add.sprite(this.x, this.y, 'hart6', 0).setScale(0.5);
@@ -359,8 +366,13 @@ drawGoal(){
     this.handlePoses(poses);
   }
 
+  handleShutDown(){
+    this.scene.sleep('timeOut');
+    this.scene.start('startup');
+  }
+
   update(){
-    // console.log(this.previousX, this.previousY);
+    console.log(this.pausedScore);
     this.fetchPoses();
 
     this.keypointsGameOjb.leftWrist.x = this.skeleton.leftWrist.x;
@@ -370,9 +382,14 @@ drawGoal(){
     this.keypointsGameOjb.rightWrist.y = this.skeleton.rightWrist.y;
 
     if(this.pausedScore === 10){
+      this.targetTimer.paused = true; 
       this.scene.launch('timeOut', {currentScene: 'gameplay'});  
       this.pausedTimer();
+    }else if(this.pausedScore === 500){
+      this.afsluiten.play();
+      this.afsluiten.on('complete', this.handleShutDown, this.scene.scene);
     }else if(this.pausedScore === 0){
+      this.targetTimer.paused = false; 
       this.scene.sleep('timeOut');
     }
 
