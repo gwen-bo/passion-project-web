@@ -4,7 +4,7 @@ import uitleg from '../assets/img/start-up/uitleg.png'
 
 import AlignGrid from '../js/utilities/alignGrid'
 
-export class StartUp extends Phaser.Scene{
+export class StartUpScene extends Phaser.Scene{
   constructor(config){
     super(config);
   }

@@ -83,7 +83,7 @@ export class StartScene extends Phaser.Scene{
       console.log('eyes should open')
       this.eyeObj.anims.play('opening');
     }else if(this.activeScore >= 800){
-      this.scene.start('welcome', {restart: this.restartNext});    
+      this.scene.start('tutorial', {restart: this.restartNext});    
     }else {
       return; 
     }

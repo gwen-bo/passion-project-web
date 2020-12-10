@@ -6,6 +6,8 @@ import skip from '../assets/img/tutorial/Skip-tut.png'
 
 import hart1 from '../assets/img/game/sprites/hart1.png'
 
+import taDa from '../assets/audio/welcome.mp3'
+
 import uitlegAudio from '../assets/audio/Dit-spel-speel-je-met-je-handen.mp3'
 import probeerHartje from '../assets/audio/Probeer-maar-Hartje.mp3'
 import Super from '../assets/audio/Super.mp3'
@@ -13,7 +15,7 @@ import Super from '../assets/audio/Super.mp3'
 
 import AlignGrid from '../js/utilities/alignGrid'
 
-export class Tutorial1Scene extends Phaser.Scene{
+export class TutorialScene extends Phaser.Scene{
   constructor(config){
     super(config);
   }
@@ -75,6 +77,7 @@ export class Tutorial1Scene extends Phaser.Scene{
     this.load.audio('uitlegAudio', uitlegAudio);
     this.load.audio('probeerHartje', probeerHartje);
     this.load.audio('Super', Super);
+    this.load.audio('taDa', taDa);
   }
 
 
@@ -117,6 +120,7 @@ export class Tutorial1Scene extends Phaser.Scene{
     this.uitlegAudio = this.sound.add('uitlegAudio', {loop: false});
     this.probeerHartje = this.sound.add('probeerHartje', {loop: false});
     this.super = this.sound.add('Super', {loop: false});
+    this.taDa = this.sound.add('taDa', {loop: false});
 
     this.uitlegAudio.play();
     this.uitlegAudio.on('complete', this.handleEndAudio, this.scene.scene);
@@ -131,11 +135,12 @@ export class Tutorial1Scene extends Phaser.Scene{
   startGame(){
     this.uitlegAudio.stop();
     this.probeerHartje.stop();
-    this.scene.start('gameBegin', {restart: this.restartNext});    
+    this.scene.start('welcome', {restart: this.restartNext});    
   }
 
   drawTarget(){
-    let target1 = this.add.sprite(250, 300, 'hart1', 17).setScale(0.5);
+    let target1 = this.add.sprite(300, 450, 'hart1', 17).setScale(0.5);
+    this.taDa.play();
     this.anims.create({
       key: 'beweeg',
       frames: this.anims.generateFrameNumbers('hart1', { start: 17, end: 18 }),
@@ -172,7 +177,7 @@ export class Tutorial1Scene extends Phaser.Scene{
     if(this.countdown >= 1){
       this.uitlegAudio.stop();
       this.probeerHartje.stop();
-      this.scene.start('gameBegin', {restart: this.restartNext});    
+      this.scene.start('welcome', {restart: this.restartNext});    
     }
   }
 

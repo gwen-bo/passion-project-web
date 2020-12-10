@@ -3,13 +3,13 @@ import Phaser from "phaser";
 import css from './style.css';
 import PoseNetPlugin from './js/plugins/PoseNetPlugin.js'
 
-import {StartUp} from './scenes/0StartUp.js';
-import {StartScene} from './scenes/1StartScene.js';
-import {WelcomeScene} from './scenes/2WelcomeScene.js';
-import {Tutorial1Scene} from './scenes/3Tutorial1.js'; // handen tutorial
-import {GameBegin} from './scenes/7GameBegin.js'; // voeten tutorial
-import {GamePlayScene} from './scenes/8GamePlayScene.js'; // gameplay -
-import {EndingScene} from './scenes/9EndingScene.js'; // ending scene -
+import {StartUpScene} from './scenes/0StartUp.js'; // uitleg/ benodigdheden
+import {StartScene} from './scenes/1StartScene.js'; // detection
+import {TutorialScene} from './scenes/2Tutorial.js'; // handen tutorial
+import {WelcomeScene} from './scenes/3Welcome.js'; // context
+// import {GameBegin} from './scenes/7GameBegin.js'; 
+import {GamePlayScene} from './scenes/4GamePlayScene.js'; // gameplay 
+import {EndingScene} from './scenes/5EndingScene.js'; // ending scene 
 import {TimeOutScene} from './scenes/TimeOutScene.js'; // time out function - melding
 
 
@@ -35,11 +35,11 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-game.scene.add(`startup`, StartUp, false);
+game.scene.add(`startup`, StartUpScene, false);
 game.scene.add(`start`, StartScene, false);
+game.scene.add(`tutorial`, TutorialScene, false);
 game.scene.add(`welcome`, WelcomeScene, false);
-game.scene.add(`tutorial1`, Tutorial1Scene, false);
-game.scene.add(`gameBegin`, GameBegin, false);
+// game.scene.add(`gameBegin`, GameBegin, false);
 game.scene.add(`gameplay`, GamePlayScene, false);
 game.scene.add(`ending`, EndingScene, false);
 game.scene.add(`timeOut`, TimeOutScene, false);

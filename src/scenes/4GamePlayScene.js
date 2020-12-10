@@ -120,7 +120,7 @@ export class GamePlayScene extends Phaser.Scene{
     this.score = 0;
     this.scoreMeter = this.add.image(0, 0, 'score-0').setScale(.8);
     this.aGrid = new AlignGrid({scene: this.scene, rows: 25, cols: 25, height: window.innerHeight, width: window.innerWidth})
-    this.aGrid.showNumbers();
+    // this.aGrid.showNumbers();
     this.aGrid.placeAtIndex(137, this.scoreMeter); // 38 of 60
 
     const plantR = this.add.sprite(0, 0, 'plantR', 0).setScale(0.5);
@@ -140,7 +140,7 @@ export class GamePlayScene extends Phaser.Scene{
     });
     plantL.play('plantL-move');
     this.aGrid.placeAtIndex(522, plantL);
-    this.aGrid.placeAtIndex(501, plantR);
+    this.aGrid.placeAtIndex(502, plantR);
 
     this.targetGroup = this.physics.add.group(); 
     this.keypointGroup = this.physics.add.group([this.handLeft, this.handRight]); 
