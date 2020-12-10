@@ -28,7 +28,7 @@ export class EndingScene extends Phaser.Scene{
     this.anims.create({
       key: 'ending',
       frames: this.anims.generateFrameNumbers('endingscreen', { start: 0, end: 1 }),
-      frameRate: 5,
+      frameRate: 3,
       repeat: -1
     });
     ending.anims.play('ending');

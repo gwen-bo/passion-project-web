@@ -1,7 +1,7 @@
 {
   "name": "passion-project-phaser-webpack",
   "version": "1.1.1",
-  "description": "Passion Project",
+  "description": "Passion Project of Gwen Bogaert (portfolio.gwenbogaert.be). Made for JEF Festival.",
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
