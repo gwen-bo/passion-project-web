@@ -23,8 +23,8 @@ export class StartUpScene extends Phaser.Scene{
   }
   
   create(){
-    let button = this.add.image(0, 0, 'button').setScale(.8);
-    let uitleg = this.add.image(0, 0, 'uitleg').setScale(.7);
+    let button = this.add.image(0, 0, 'button').setScale(.5);
+    let uitleg = this.add.image(0, 0, 'uitleg').setScale(.5);
     button.setInteractive({ useHandCursor: true });
     button.on('pointerdown', () => this.startGame() );
 

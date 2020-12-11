@@ -100,7 +100,7 @@ export class TutorialScene extends Phaser.Scene{
     skipButton.setInteractive({ useHandCursor: true });
     skipButton.on('pointerdown', () => this.startGame() );
 
-    let title = this.add.image(0, 0, 'uitlegHanden').setScale(.9);
+    let title = this.add.image(0, 0, 'uitlegHanden').setScale(.6);
     this.aGrid = new AlignGrid({scene: this.scene, rows:25, cols: 25, height: window.innerHeight, width: window.innerWidth})
     // this.aGrid.showNumbers();
     this.aGrid.placeAtIndex(112, title); //

@@ -120,10 +120,10 @@ export class GamePlayScene extends Phaser.Scene{
     this.handRight = this.physics.add.existing(this.keypointsGameOjb.rightWrist);
 
     this.score = 0;
-    this.scoreMeter = this.add.image(0, 0, 'score-0').setScale(.8);
+    this.scoreMeter = this.add.image(0, 0, 'score-0').setScale(.7);
     this.aGrid = new AlignGrid({scene: this.scene, rows: 25, cols: 25, height: window.innerHeight, width: window.innerWidth})
     // this.aGrid.showNumbers();
-    this.aGrid.placeAtIndex(137, this.scoreMeter); // 38 of 60
+    this.aGrid.placeAtIndex(137, this.scoreMeter); 
 
     const plantR = this.add.sprite(0, 0, 'plantR', 0).setScale(0.5);
     this.anims.create({
@@ -173,7 +173,7 @@ export class GamePlayScene extends Phaser.Scene{
     for (let i = 0; i < keypoints.length; i++) {
         this.handleKeyPoint(keypoints[i], scale);
     }
-}
+  }
 
   handleKeyPoint = (keypoint, scale) => {
     if(!(keypoint.part === "leftWrist" || keypoint.part === "rightWrist")) {
