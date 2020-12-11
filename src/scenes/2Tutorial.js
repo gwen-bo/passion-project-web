@@ -60,7 +60,6 @@ export class TutorialScene extends Phaser.Scene{
     if(keypoint.score <= 0.25){
         return;
     }
-
     let skeletonPart = this.skeleton[keypoint.part];
     const {y, x} = keypoint.position;
     skeletonPart.x += (x - skeletonPart.x) / 10;

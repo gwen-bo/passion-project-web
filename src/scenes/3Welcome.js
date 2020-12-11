@@ -1,7 +1,6 @@
 import handR from '../assets/img/keypoints/handR.png'
 import handL from '../assets/img/keypoints/handL.png'
 import titlescreen from '../assets/img/titlescreen/titlescreen.png'
-import welcomeSound from '../assets/audio/welcome.mp3'
 import betekenisAudio from '../assets/audio/Ondersteboven-zijn-van-iemand-betekent.mp3'
 import skip from '../assets/img/tutorial/Skip-tut.png'
 

@@ -26,6 +26,8 @@ import handR from '../assets/img/keypoints/handR.png'
 import handL from '../assets/img/keypoints/handL.png'
 
 import hit from '../assets/audio/hit.mp3'
+
+import backgroundMusic from '../assets/audio/background-music.mp3'
 import Klaar from '../assets/audio/Klaar-start.mp3'
 import Super from '../assets/audio/Super.mp3'
 import BijnaVol from '../assets/audio/Nog-eentje-de-meter-zit-bijna-vol.mp3'
@@ -95,6 +97,8 @@ export class GamePlayScene extends Phaser.Scene{
     this.load.audio('EersteAl', EersteAl);
     this.load.audio('BijnaVol', BijnaVol);
     this.load.audio('Afsluiten', Afsluiten);
+    this.load.audio('backgroundMusic', backgroundMusic);
+
   }
 
   keypointsGameOjb = {
@@ -155,6 +159,8 @@ export class GamePlayScene extends Phaser.Scene{
     this.bijnaVol = this.sound.add('BijnaVol', {loop: false});
     this.eersteAl = this.sound.add('EersteAl', {loop: false});
     this.afsluiten = this.sound.add('Afsluiten', {loop: false});
+    this.backgroundMusic = this.sound.add('backgroundMusic', {loop: true});
+    this.backgroundMusic.setVolume(0.1);
 
     this.klaar.play();
     this.klaar.on('complete', this.handleStart, this.scene.scene);
@@ -165,6 +171,7 @@ export class GamePlayScene extends Phaser.Scene{
   targetTimer; 
   handleStart(){
     this.createCoordinates();
+    this.backgroundMusic.play();
     this.targetTimer.paused = false; 
 
   }

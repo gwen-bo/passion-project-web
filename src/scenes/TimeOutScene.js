@@ -7,11 +7,9 @@ export class TimeOutScene extends Phaser.Scene{
       super(config);
     }
 
-    currentScene = 'gameplay'; 
 
-    init = (data) => {
+    init = () => {
         console.log(`timeOut scene INIT`);
-        this.currentScene = data.currentScene;
     }
 
     preload(){
