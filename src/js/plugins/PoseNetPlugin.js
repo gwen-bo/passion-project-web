@@ -45,7 +45,7 @@ class PoseNetPlugin extends Phaser.Plugins.BasePlugin {
         });
         // console.log('pose estimation');
         this.poses = this.poses.concat(pose);
-        console.log('pose estimation', pose);
+        // console.log('pose estimation', pose);
         return this.poses; 
     }
 

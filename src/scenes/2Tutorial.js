@@ -134,7 +134,7 @@ export class TutorialScene extends Phaser.Scene{
   startGame(){
     this.uitlegAudio.stop();
     this.probeerHartje.stop();
-    this.scene.start('welcome', {restart: this.restartNext});    
+    this.scene.start('game', {restart: this.restartNext});    
   }
 
   drawTarget(){
@@ -176,7 +176,7 @@ export class TutorialScene extends Phaser.Scene{
     if(this.countdown >= 1){
       this.uitlegAudio.stop();
       this.probeerHartje.stop();
-      this.scene.start('welcome', {restart: this.restartNext});    
+      this.scene.start('game', {restart: this.restartNext});    
     }
   }
 
