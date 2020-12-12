@@ -40,7 +40,7 @@ export class EndingScene extends Phaser.Scene{
   onEvent(){
     this.t++
     if(this.t >= 10){
-      this.scene.start('start', {restart: true});    
+      this.scene.start('startup', {restart: true});    
     }
   }
   

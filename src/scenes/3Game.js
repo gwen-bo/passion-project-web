@@ -51,7 +51,7 @@ export class GameScene extends Phaser.Scene{
 
       this.t = 0; 
       this.score = 0;
-      this.pausedTime = 0; 
+      this.pausedScore = 0; 
       this.gameStarted = false; 
 
       this.restart = data.restart;
@@ -123,6 +123,7 @@ export class GameScene extends Phaser.Scene{
     posenetplugin;
     create(){  
       this.score = 0;
+      this.pausedScore = 0; 
 
       this.posenetplugin = this.plugins.get('PoseNetPlugin');
       this.aGrid = new AlignGrid({scene: this.scene, rows:25, cols: 25, height: window.innerHeight, width: window.innerWidth})
@@ -364,15 +365,6 @@ export class GameScene extends Phaser.Scene{
     this.targetGroup.add(newTarget, false);
   }
   
-    pausedTimer(){
-      this.pausedTime++;
-      if(this.pausedTime >= 600){
-        this.scene.stop('timeOut');
-        this.scene.start('start', { restart: true, webcamObj: this.$webcam, poseNet: this.poseNet});    
-      }
-    }
-    pausedTime; 
-  
     pausedScore = 0; 
     // PLUGIN
     handlePoses(poses){
@@ -381,7 +373,7 @@ export class GameScene extends Phaser.Scene{
           this.pausedScore = 0; 
           this.drawKeypoints(keypoints);
           return; 
-        }else if (score <= 0.02){
+        }else if (score <= 0.07){
           this.pausedScore++
         }
       })
@@ -417,6 +409,12 @@ export class GameScene extends Phaser.Scene{
       this.handlePoses(poses);
     }
 
+    handleShutDown(){
+      this.scene.sleep('timeOut');
+      this.backgroundMusic.stop();
+      this.scene.start('startup');
+    }
+
     update(){
       this.fetchPoses();
 
@@ -429,15 +427,12 @@ export class GameScene extends Phaser.Scene{
       if(this.gameStarted === true){
         this.scoreMeter.setTexture(`score-${this.score}`);
 
-        if(this.pausedScore === 10){
-          // this.targetTimer.paused = true; 
+        if(this.pausedScore === 10){    
           this.scene.launch('timeOut', {currentScene: 'gameplay'});  
-          this.pausedTimer();
-        }else if(this.pausedScore === 500){
+        }else if(this.pausedScore <= 200 && this.pausedScore >= 150){ 
           this.afsluiten.play();
           this.afsluiten.on('complete', this.handleShutDown, this.scene.scene);
         }else if(this.pausedScore === 0){
-          // this.targetTimer.paused = false; 
           this.scene.sleep('timeOut');
         }
       }

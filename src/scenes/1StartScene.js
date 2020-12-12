@@ -13,7 +13,7 @@ export class StartScene extends Phaser.Scene{
     init = (data) => {
 
     console.log(`StartScene INIT`);
-
+    this.activeScore = 0;
     this.restart = data.restart;
     this.restartNext = data.restart;
       console.log(this.restart);
@@ -39,7 +39,7 @@ export class StartScene extends Phaser.Scene{
     this.anims.create({
       key: 'opening',
       frames: this.anims.generateFrameNumbers('eye', { start: 0, end: 7 }),
-      frameRate: 15,
+      frameRate: 20,
       repeat: 0,
     });
     this.anims.create({
@@ -63,7 +63,7 @@ export class StartScene extends Phaser.Scene{
         this.activeScore++
         return; 
       }else if (score <= 0.05 ){
-        this.activeScore === 0;
+        this.activeScore = 0;
       }
     })
   }
@@ -82,7 +82,7 @@ export class StartScene extends Phaser.Scene{
     }else if(this.activeScore <= 100 && this.activeScore >= 50){
       console.log('eyes should open')
       this.eyeObj.anims.play('opening');
-    }else if(this.activeScore >= 800){
+    }else if(this.activeScore >= 450){
       this.scene.start('tutorial', {restart: this.restartNext});    
     }else {
       return; 
