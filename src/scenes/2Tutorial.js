@@ -1,4 +1,3 @@
-// uitleg over handen strekken en bolletje dat handen voorstelt 
 import handR from '../assets/img/keypoints/handR.png'
 import handL from '../assets/img/keypoints/handL.png'
 import uitlegHanden from '../assets/img/tutorial/Handen-tut.png'
@@ -44,12 +43,11 @@ export class TutorialScene extends Phaser.Scene{
     }
   }
 
-  // eventueel ook op andere javascript file 
   drawKeypoints = (keypoints, scale = 1) => {
     for (let i = 0; i < keypoints.length; i++) {
         this.handleKeyPoint(keypoints[i], scale);
     }
-}
+  }
 
   skeleton;
 
@@ -168,7 +166,7 @@ export class TutorialScene extends Phaser.Scene{
     })
 
     this.time.addEvent({ delay: 1000, callback: this.onHitCountdown, callbackScope: this, repeat: 2 });    
-}
+  } 
 
   countdown = 0; 
   onHitCountdown(){

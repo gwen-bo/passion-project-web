@@ -3,7 +3,6 @@ import handL from '../assets/img/keypoints/handL.png'
 import titlescreen from '../assets/img/titlescreen/titlescreen.png'
 import betekenisAudio from '../assets/audio/Ondersteboven-zijn-van-iemand-betekent.mp3'
 import skip from '../assets/img/tutorial/Skip-tut.png'
-
 import AlignGrid from '../js/utilities/alignGrid'
 
 // gameplay scene
@@ -21,12 +20,11 @@ import score10 from '../assets/img/game/meter/10.png'
 import score11 from '../assets/img/game/meter/11.png'
 import score12 from '../assets/img/game/meter/12.png'
 import score13 from '../assets/img/game/meter/13.png'
-
 import hart3 from '../assets/img/game/sprites/hart3.png'
 import hart4 from '../assets/img/game/sprites/hart4.png'
 import hart1 from '../assets/img/game/sprites/hart1.png'
 import hart6 from '../assets/img/game/sprites/hart6.png'
-
+import plant2 from '../assets/img/tutorial/plant2.png'
 import plantR from '../assets/img/game/visuals/plantR.png'
 import plantL from '../assets/img/game/visuals/plantL.png'
 import hit from '../assets/audio/hit.mp3'
@@ -68,16 +66,22 @@ export class GameScene extends Phaser.Scene{
     }
 
     preload(){
+      let graphics = this.add.graphics();
+      var progressBar = new Phaser.Geom.Circle((window.innerWidth/2), (window.innerHeight/2), 50);
+
+      graphics.fillStyle(0xFF9880, 1);
+      graphics.fillCircle(progressBar);
+
+      this.load.on('complete', function () {
+        console.log('complete');
+        graphics.destroy();
+      });
       this.load.spritesheet('titlescreen', titlescreen, { frameWidth: 960, frameHeight: 945.47 });
       this.load.image('skip', skip);
       this.load.image('handR', handR);
       this.load.image('handL', handL);
       this.load.audio('betekenisAudio', betekenisAudio);
-      this.loadGameAssets();
-    }
-
-    // gameScene assets inladen
-    loadGameAssets(){
+      // this.loadGameAssets();
       this.load.audio('hit', hit);
       this.load.spritesheet('hart3', hart3, { frameWidth: 337, frameHeight: 409 });
       this.load.spritesheet('hart4', hart4, { frameWidth: 337, frameHeight: 409 });
@@ -86,7 +90,8 @@ export class GameScene extends Phaser.Scene{
   
       this.load.spritesheet('plantR', plantR, { frameWidth: 695, frameHeight: 809 });
       this.load.spritesheet('plantL', plantL, { frameWidth: 695, frameHeight: 809 });
-  
+      this.load.spritesheet('plant2', plant2, { frameWidth: 695, frameHeight: 465 });
+
       this.load.image('score-0', score0);
       this.load.image('score-1', score1);
       this.load.image('score-2', score2);
@@ -108,7 +113,12 @@ export class GameScene extends Phaser.Scene{
       this.load.audio('BijnaVol', BijnaVol);
       this.load.audio('Afsluiten', Afsluiten);
       this.load.audio('backgroundMusic', backgroundMusic);  
+
     }
+
+    // gameScene assets inladen
+    // loadGameAssets(){
+    // }
 
     handLeft = undefined; 
     handRight = undefined; 
@@ -184,6 +194,14 @@ export class GameScene extends Phaser.Scene{
         repeat: -1
       });
       plantR.play('plantR-move');
+      const plant2 = this.add.sprite(0, 0, 'plant2', 0).setScale(0.5).setDepth(1);
+      this.anims.create({
+        key: 'plant2-move',
+        frames: this.anims.generateFrameNumbers('plant2', { start: 0, end: 2 }),
+        frameRate: 2,
+        repeat: -1
+      });
+      plant2.play('plant2-move');  
       const plantL = this.add.sprite(0, 0, 'plantL', 0).setScale(0.5);
       this.anims.create({
         key: 'plantL-move',
@@ -194,7 +212,8 @@ export class GameScene extends Phaser.Scene{
       plantL.play('plantL-move');
       this.aGrid.placeAtIndex(497, plantL); //497
       this.aGrid.placeAtIndex(502, plantR);
-  
+      this.aGrid.placeAtIndex(53, plant2); 
+
       this.hitSound = this.sound.add('hit', {loop: false});
 
       this.klaar = this.sound.add('Klaar', {loop: false});
@@ -270,7 +289,7 @@ export class GameScene extends Phaser.Scene{
   previousY =0;
   createCoordinates(){
     this.targetGroup.clear(true, true);
-    this.x = Phaser.Math.Between(100, (window.innerWidth - 100));
+    this.x = Phaser.Math.Between(200, (window.innerWidth - 200));
     this.y = Phaser.Math.Between(400, (window.innerHeight - 200));
   
     if(!(this.previousY === undefined && this.previousX === undefined)){

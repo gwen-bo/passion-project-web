@@ -9,13 +9,9 @@ export class StartUpScene extends Phaser.Scene{
     super(config);
   }
 
-  restart; 
-  restartNext; 
 
     init = () => {
     }
-
-
 
   preload(){
     this.load.image('button', button);
@@ -24,7 +20,7 @@ export class StartUpScene extends Phaser.Scene{
   
   create(){
     console.log(this.game);
-
+    
     let button = this.add.image(0, 0, 'button').setScale(.5);
     let uitleg = this.add.image(0, 0, 'uitleg').setScale(.5);
     button.setInteractive({ useHandCursor: true });
@@ -37,7 +33,7 @@ export class StartUpScene extends Phaser.Scene{
   }
 
   startGame(){
-    this.scene.start('start', {restart: false});    
+    this.scene.start('uitlegTut', {restart: false});    
   }
 
 

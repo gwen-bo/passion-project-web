@@ -9,7 +9,7 @@ class PoseNetPlugin extends Phaser.Plugins.BasePlugin {
     poses;
     $webcam; 
     loaded = false; 
-
+    videostream
     init = async () => {
         console.log('PoseNetPlugin has started');
         this.$webcam = document.querySelector('#webcam');
@@ -20,10 +20,13 @@ class PoseNetPlugin extends Phaser.Plugins.BasePlugin {
         this.$webcam.height = window.innerHeight;
 
         this.poseNet = await posenet.load();
-        const videostream = await navigator.mediaDevices.getUserMedia({ video: true });
-        this.$webcam.srcObject = videostream;
+        this.videostream = await navigator.mediaDevices.getUserMedia({ video: {
+            width: { min: 1024, ideal: 1280, max: 1920 },
+            height: { min: 576, ideal: 720, max: 1080 }
+          } });
+        this.$webcam.srcObject = this.videostream;
         if (!this.$webcam.captureStream) {
-            this.$webcam.captureStream = () => videostream;
+            this.$webcam.captureStream = () => this.videostream;
         };
 
         this.$webcam.addEventListener('loadeddata', () => {
@@ -34,6 +37,10 @@ class PoseNetPlugin extends Phaser.Plugins.BasePlugin {
             }
             // this.$webcamFeed.srcObject = videostream;
         });
+    }
+
+    getWebcamStream(){
+        return this.videostream
     }
 
     poseEstimation = async () => {
