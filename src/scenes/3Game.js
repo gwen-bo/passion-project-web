@@ -64,26 +64,42 @@ export class GameScene extends Phaser.Scene{
     }
 
     preload(){
-      let graphics = this.add.graphics();
-      var progressBar = new Phaser.Geom.Circle((window.innerWidth/2), (window.innerHeight/2), 50);
+      let progressBar = this.add.graphics();
+      let progressBox = this.add.graphics();
+      progressBox.fillStyle(0xffc9bc);
+      progressBox.fillRect((window.innerWidth/2) -160, (window.innerHeight/2) -25, 320, 50);
 
-      graphics.fillStyle(0xFF9880, 1);
-      graphics.fillCircle(progressBar);
-
-      this.load.on('complete', function () {
-        graphics.destroy();
+      let loadingText = this.make.text({
+        x: (window.innerWidth/2),
+        y: (window.innerHeight/2),
+        text: 'Aan het laden...',
+        style: {
+            font: '20px monospace',
+            fill: '#fd4e05'
+        }
       });
+
+      loadingText.setOrigin(0.5, 0.5);
+        this.load.on('progress', function (value) {
+          console.log(value);
+          progressBar.clear();
+          progressBar.fillStyle(0xfd4e05);
+          progressBar.fillRect((window.innerWidth/2) -150, (window.innerHeight/2) -15, 300 * value, 30);
+      });
+                        
+      this.load.on('complete', function () {
+          console.log('complete');
+          progressBar.destroy();
+          progressBox.destroy();
+          loadingText.destroy();
+      });
+
       this.load.spritesheet('titlescreen', titlescreen, { frameWidth: 960, frameHeight: 945.47 });
       this.load.image('skip', skip);
       this.load.image('handR', handR);
       this.load.image('handL', handL);
       this.load.audio('betekenisAudio', betekenisAudio);
       
-      this.loadGameAssets();
-    }
-
-    // gameScene assets inladen
-    loadGameAssets(){
       this.load.audio('hit', hit);
       this.load.spritesheet('hart3', hart3, { frameWidth: 337, frameHeight: 409 });
       this.load.spritesheet('hart4', hart4, { frameWidth: 337, frameHeight: 409 });
@@ -114,8 +130,9 @@ export class GameScene extends Phaser.Scene{
       this.load.audio('EersteAl', EersteAl);
       this.load.audio('BijnaVol', BijnaVol);
       this.load.audio('Afsluiten', Afsluiten);
-      this.load.audio('backgroundMusic', backgroundMusic);  
+      this.load.audio('backgroundMusic', backgroundMusic);      
     }
+
 
     handLeft = undefined; 
     handRight = undefined; 
