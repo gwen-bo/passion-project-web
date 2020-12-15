@@ -22,7 +22,6 @@ export class UitlegTutScene extends Phaser.Scene{
   restartNext; 
 
     init = (data) => {
-    // console.log(`StartScene INIT`);
     this.activeScore = 0;
     this.restart = data.restart;
 
@@ -145,7 +144,6 @@ export class UitlegTutScene extends Phaser.Scene{
       const phaserVideo = new Phaser.GameObjects.Video(this, (window.innerWidth/2), (window.innerHeight/2));
         let scaleX = ((1 / 1280) * window.innerWidth)
         let scaleY = ((1 / 720) * window.innerHeight)
-      console.log(phaserVideo);
       phaserVideo.setScale(scaleX, scaleY); 
       phaserVideo.video = video;
       phaserVideo.toggleFlipX();
@@ -159,7 +157,6 @@ export class UitlegTutScene extends Phaser.Scene{
   }
 
   handleEndAudio(){
-    console.log('audio is gedaan');
     this.probeerHartje.play();
     this.probeerHartje.on('complete', this.drawTarget, this.scene.scene);
   }
@@ -185,7 +182,6 @@ export class UitlegTutScene extends Phaser.Scene{
 
   // welke functie er opgeropen wordt bij de overlap tussen de speler 
   handleHit (hand, target){
-    console.log('hit');
     this.countdownt = 0;
     this.targetGroup.remove(target);
     this.super.play();

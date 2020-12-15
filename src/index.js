@@ -5,10 +5,7 @@ import PoseNetPlugin from './js/plugins/PoseNetPlugin.js'
 
 import {StartUpScene} from './scenes/0StartUp.js'; // uitleg/ benodigdheden
 import {UitlegTutScene} from './scenes/1UitlegTut.js'; // uitleg/ benodigdheden
-
-import {StartScene} from './scenes/1StartScene.js'; // detection
-import {TutorialScene} from './scenes/2Tutorial.js'; // handen tutorial
-import {GameScene} from './scenes/3Game.js'; // context
+import {GameScene} from './scenes/3Game.js'; // context + gameplay
 import {EndingScene} from './scenes/4EndingScene.js'; // ending scene 
 import {TimeOutScene} from './scenes/TimeOutScene.js'; // time out function - melding
 
@@ -37,14 +34,9 @@ const config = {
 const game = new Phaser.Game(config);
 
 game.scene.add(`startup`, StartUpScene, false);
-game.scene.add(`start`, StartScene, false);
 game.scene.add(`uitlegTut`, UitlegTutScene, false);
-
-game.scene.add(`tutorial`, TutorialScene, false);
 game.scene.add(`game`, GameScene, false);
 game.scene.add(`ending`, EndingScene, false);
 game.scene.add(`timeOut`, TimeOutScene, false);
-
-
 
 game.scene.start(`startup`, {restart: false});

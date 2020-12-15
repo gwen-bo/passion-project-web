@@ -45,7 +45,6 @@ export class GameScene extends Phaser.Scene{
     restartNext; 
     
       init = (data) => {
-      console.log(`WelcomeScene INIT`);
 
       this.t = 0; 
       this.score = 0;
@@ -55,7 +54,6 @@ export class GameScene extends Phaser.Scene{
       this.restart = data.restart;
       this.restartNext = data.restart;
       if(this.restart === true){
-        console.log('restarting');
         this.scene.restart({ restart: false})
       }
 
@@ -73,7 +71,6 @@ export class GameScene extends Phaser.Scene{
       graphics.fillCircle(progressBar);
 
       this.load.on('complete', function () {
-        console.log('complete');
         graphics.destroy();
       });
       this.load.spritesheet('titlescreen', titlescreen, { frameWidth: 960, frameHeight: 945.47 });
@@ -81,7 +78,12 @@ export class GameScene extends Phaser.Scene{
       this.load.image('handR', handR);
       this.load.image('handL', handL);
       this.load.audio('betekenisAudio', betekenisAudio);
-      // this.loadGameAssets();
+      
+      this.loadGameAssets();
+    }
+
+    // gameScene assets inladen
+    loadGameAssets(){
       this.load.audio('hit', hit);
       this.load.spritesheet('hart3', hart3, { frameWidth: 337, frameHeight: 409 });
       this.load.spritesheet('hart4', hart4, { frameWidth: 337, frameHeight: 409 });
@@ -113,12 +115,7 @@ export class GameScene extends Phaser.Scene{
       this.load.audio('BijnaVol', BijnaVol);
       this.load.audio('Afsluiten', Afsluiten);
       this.load.audio('backgroundMusic', backgroundMusic);  
-
     }
-
-    // gameScene assets inladen
-    // loadGameAssets(){
-    // }
 
     handLeft = undefined; 
     handRight = undefined; 
@@ -294,8 +291,7 @@ export class GameScene extends Phaser.Scene{
   
     if(!(this.previousY === undefined && this.previousX === undefined)){
       let distance = Phaser.Math.Distance.Between(this.x, this.y, this.previousX, this.previousY);
-      console.log(this.score, distance);
-        if(distance <= 600){
+        if(distance <= 400){
           this.createCoordinates();
           return; 
         }else {
@@ -310,7 +306,6 @@ export class GameScene extends Phaser.Scene{
    
   drawGoal(){
     // this.targetGroup.clear(true, true);
-    console.log('drawGoal activated');
     const targets = ["hart3", "hart4", "hart1", "hart6"];
     let currentTarget = targets[Math.floor(Math.random()*targets.length)];
     let newTarget; 
@@ -448,7 +443,7 @@ export class GameScene extends Phaser.Scene{
 
         if(this.pausedScore === 10){    
           this.scene.launch('timeOut', {currentScene: 'gameplay'});  
-        }else if(this.pausedScore <= 200 && this.pausedScore >= 150){ 
+        }else if(this.pausedScore <= 500 && this.pausedScore >= 450){ 
           this.afsluiten.play();
           this.afsluiten.on('complete', this.handleShutDown, this.scene.scene);
         }else if(this.pausedScore === 0){

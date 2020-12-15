@@ -9,7 +9,6 @@ export class TimeOutScene extends Phaser.Scene{
 
 
     init = () => {
-        console.log(`timeOut scene INIT`);
     }
 
     preload(){

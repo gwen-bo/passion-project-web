@@ -10,7 +10,6 @@ export class EndingScene extends Phaser.Scene{
 
   init = async() => {
     this.t = 0; 
-    console.log(`EndingScene INIT`);
   }
 
   preload(){
@@ -39,7 +38,7 @@ export class EndingScene extends Phaser.Scene{
   t = 0; 
   onEvent(){
     this.t++
-    if(this.t >= 10){
+    if(this.t >= 5){
       this.scene.start('startup', {restart: true});    
     }
   }
