@@ -2,7 +2,8 @@ import handR from '../assets/img/keypoints/handR.png'
 import handL from '../assets/img/keypoints/handL.png'
 import hart1 from '../assets/img/game/sprites/hart1.png'
 import taDa from '../assets/audio/welcome.mp3'
-import uitlegAudio from '../assets/audio/Dit-spel-speel-je-met-je-handen.mp3'
+import uitleg1 from '../assets/audio/uitleg1.mp3'
+import uitleg2 from '../assets/audio/uitleg2.mp3'
 import probeerHartje from '../assets/audio/Probeer-maar-Hartje.mp3'
 import Super from '../assets/audio/Super.mp3'
 
@@ -49,7 +50,8 @@ export class UitlegTutScene extends Phaser.Scene{
     this.load.spritesheet('plantR', plantR, { frameWidth: 695, frameHeight: 809 });
     this.load.spritesheet('plantL', plantL, { frameWidth: 695, frameHeight: 809 });
 
-    this.load.audio('uitlegAudio', uitlegAudio);
+    this.load.audio('uitleg1', uitleg1);
+    this.load.audio('uitleg2', uitleg2);
     this.load.audio('probeerHartje', probeerHartje);
     this.load.audio('Super', Super);
     this.load.audio('taDa', taDa);
@@ -117,14 +119,16 @@ export class UitlegTutScene extends Phaser.Scene{
     this.physics.add.overlap(this.handLeft, this.targetGroup, this.handleHit, null, this);
     this.physics.add.overlap(this.handRight, this.targetGroup, this.handleHit, null, this);
 
-    this.uitlegAudio = this.sound.add('uitlegAudio', {loop: false});
+    this.uitleg1 = this.sound.add('uitleg1', {loop: false});
+    this.uitleg2 = this.sound.add('uitleg2', {loop: false});
+
     this.probeerHartje = this.sound.add('probeerHartje', {loop: false});
     this.super = this.sound.add('Super', {loop: false});
     this.taDa = this.sound.add('taDa', {loop: false});
 
-    this.uitlegAudio.play();
+    this.uitleg1.play();
     this.showStream();
-    this.uitlegAudio.on('complete', this.handleEndAudio, this.scene.scene);
+    this.uitleg1.on('complete', this.handleEndAudio, this.scene.scene);
   }
 
   showStream = async () => {
@@ -157,8 +161,8 @@ export class UitlegTutScene extends Phaser.Scene{
   }
 
   handleEndAudio(){
-    this.probeerHartje.play();
-    this.probeerHartje.on('complete', this.drawTarget, this.scene.scene);
+    this.uitleg2.play();
+    this.uitleg2.on('complete', this.drawTarget, this.scene.scene);
   }
 
   drawTarget(){
@@ -197,8 +201,8 @@ export class UitlegTutScene extends Phaser.Scene{
   onHitCountdown(){
     this.countdown++
     if(this.countdown >= 1){
-      this.uitlegAudio.stop();
-      this.probeerHartje.stop();
+      this.uitleg1.stop();
+      this.uitleg2.stop();
       this.scene.start('game', {restart: this.restartNext});    
     }
   }
